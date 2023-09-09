@@ -2,8 +2,10 @@
 
 Вспомним, как создать новый Django-проект
 django-admin startproject project
+
 Затем создадим приложение simpleapp, в котором будем учиться работать с представлениями
 python manage.py startapp simpleapp
+
 Добавим в приложение модели:
 class Product(models.Model):
 .....
@@ -94,8 +96,8 @@ urlpatterns = [
 Не забудьте изменить настройки в settings.py:
 
 Добавить ваше новое приложение в список INSTALLED_APPS.
-Обновить настройку TEMPLATES.
-Добавить список STATICFILES_DIRS.
+Обновить настройку TEMPLATES.   https://developer.mozilla.org/ru/docs/Learn/Server-side/Django/skeleton_website
+Добавить список STATICFILES_DIRS.   https://metanit.com/python/django/2.2.php
 Мы уже проходили эти настройки в юнитах D1.3 и D1.5.
 
 После этого для наших новых моделей нужно создать и применить миграции.
