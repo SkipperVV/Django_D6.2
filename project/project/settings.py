@@ -40,7 +40,6 @@ INSTALLED_APPS = [
     # added by me
     'project',
     'simpleapp',
-    # 'simpleapp.apps.SimpleappConfig',
 ]
 
 MIDDLEWARE = [

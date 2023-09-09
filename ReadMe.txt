@@ -95,9 +95,18 @@ urlpatterns = [
 
 Не забудьте изменить настройки в settings.py:
 
-Добавить ваше новое приложение в список INSTALLED_APPS.
+Добавить ваше новое приложение в список
+INSTALLED_APPS.
 Обновить настройку TEMPLATES.   https://developer.mozilla.org/ru/docs/Learn/Server-side/Django/skeleton_website
 Добавить список STATICFILES_DIRS.   https://metanit.com/python/django/2.2.php
 Мы уже проходили эти настройки в юнитах D1.3 и D1.5.
 
 После этого для наших новых моделей нужно создать и применить миграции.
+''' как формируются ссылки в проекте.
+Изначально у нас есть домен http://127.0.0.1:8000/ к нему добавляется префикс, который вы определяете в основном project/urls
+В project/urls, определен маршрут path('app/', include('app.urls')) и мы получаем ссылку http://127.0.0.1:8000/app/
+дальше добавляются префикс из app/urls, которые мы включаем сюда функцией include('app.urls')
+В app/urls, определен маршрут path('', MyList.as_view()), получаем ссылку http://127.0.0.1:8000/app/
+В app/urls, определен маршрут path('something', MyList.as_view()), получаем ссылку http://127.0.0.1:8000/app/something
+В app/urls, определен маршрут path('<int:pk>', MyDetail.as_view()), получаем ссылку http://127.0.0.1:8000/app/<int:pk>,
+где <int:pk> это число, как правильно id нашего объекта модели'''
