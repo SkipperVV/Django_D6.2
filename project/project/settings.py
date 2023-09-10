@@ -13,8 +13,7 @@ import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
-
+BASE_DIR = Path(__file__).resolve().parent.parent #BASE_DIR	= 'C:/Django_D6.2/project'
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
@@ -26,7 +25,6 @@ SECRET_KEY = 'django-insecure-%2*bnhg*zl3d47@1jdaoq8eggb&*))l7*l9v&byu)um!4drcb7
 DEBUG = True
 
 ALLOWED_HOSTS = []
-
 
 # Application definition
 
@@ -40,6 +38,9 @@ INSTALLED_APPS = [
     # added by me
     'project',
     'simpleapp',
+    'django.contrib.sites',
+    'django.contrib.flatpages',
+
 ]
 
 MIDDLEWARE = [
@@ -50,8 +51,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-
-    #'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
+# added by me
+    'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
 ]
 
 ROOT_URLCONF = 'project.urls'
@@ -59,7 +60,7 @@ ROOT_URLCONF = 'project.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')], # added by me <os.path.join(BASE_DIR, 'templates')>
+        'DIRS': [os.path.join(BASE_DIR, "templates")],  # added by me <BASE_DIR=C:/Django_D6.2/project>
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -68,14 +69,13 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 # added by me
-
+                # 'django.contrib.flatpages',
             ],
         },
     },
 ]
 
 WSGI_APPLICATION = 'project.wsgi.application'
-
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
@@ -86,7 +86,6 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -106,7 +105,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 
@@ -118,18 +116,19 @@ USE_I18N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = 'static/'
 
+# Added by me
+#BASE_DIR = 'C:/Django_D6.2/project'
+
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "static")
+] #=C:\Django_D6.2\project\static
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-#Added by me
-STATICFILES_DIRS = [
-    BASE_DIR / "static"
-]
