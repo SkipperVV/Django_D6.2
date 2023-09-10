@@ -12,5 +12,9 @@
     <img src="{% static 'images/Products.jpeg' %}" align="center" alt="products">
 </p>
 <style> .aligncenter {text-align: center;} </style>
+{% block content %}
+<h1>Все товары</h1>
+{{ products }}
+{% endblock content %}
 </body>
 </html>
