@@ -1,13 +1,40 @@
-<!--  наследуемся от шаблона default.html, который мы создавали для flatpages -->
 {% extends 'flatpages/default.html' %}
+{% load custom_filters %}
+<!-- Подключаем новый файл с нашим тегом -->
+{% load custom_tags %}
 
-<!-- Название у нас будет products -->
 {% block title %}
 Products
 {% endblock title %}
-
-<!-- В контенте на странице мы выводим все товары -->
 {% block content %}
-<h1>Все товары</h1>
-{{ products }}
+<h1>Все товары в наличии</h1>
+<h3>{% current_time '%b %d %Y' %}</h3>
+<!--  или {{time_now|date:'M d Y'}}</h3> -->
+<!-- фильтр default_if_none -->
+<h3>{{next_sale|default_if_none:'Распродажи нет, не будет и не надейтесь.'}}</h3>
+<hr>
+{% if products %}
+<table>
+    <tr>
+        <td> Название: </td>
+        <td> Описание: </td>
+        <td> Категория: </td>
+        <td> Цена: </td>
+        <td> Количество: </td>
+    </tr>
+    {% for item in products %}
+    <tr>
+        <td width="150">{{item.name}}</td>
+        <td>{{item.description|truncatewords:10}}</td>
+        <td width="300">{{item.category.name}}</td>
+        <td width="100">{{item.price|currency:"rub"}}</td>
+        <td width="100" align="center">{{item.quantity}}</td>
+    </tr>
+    {% endfor %}
+</table>
+{% else %}
+<h2>Товаров нет!</h2>
+{% endif %}
 {% endblock content %}
+<!--Про тэги
+     http://htmlbook.ru/html/table -->
