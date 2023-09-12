@@ -1,46 +1,22 @@
-'''Импортируем класс, который говорит нам о том,
-что в этом представлении мы будем выводить список объектов из БД'''
-from django.views.generic import ListView, DetailView
+from typing import Any
+from django.shortcuts import render
+from django.views.generic import ListView
+# импортируем уже знакомый generic
+from .filters import ProductFilter  
+ 
 from .models import Product
-from datetime import datetime
 
-class ProductsList(ListView):
-    # Указываем модель, объекты которой мы будем выводить
+ 
+# Create your views here.
+ 
+class Product(ListView):
     model = Product
-    # Поле, которое будет использоваться для сортировки объектов
-    ordering = 'name'
-    # Указываем имя шаблона, в котором будут все инструкции о том,
-    # как именно пользователю должны быть показаны наши объекты
-    template_name = 'products.html'
-    # Это имя списка, в котором будут лежать все объекты.
-    # Его надо указать, чтобы обратиться к списку объектов в html-шаблоне.
-    context_object_name = 'products'
-
-    '''В этот раз мы будем использовать DetailView. Он отличается от ListView тем, что возвращает конкретный объект, 
-    а не список всех объектов из БД. Адрес, однако, будет немного отличаться. В него надо будет добавить идентификатор 
-    товара, который мы хотим получить.
-    Для этого снова перейдём в файл simpleapp/views.py и добавим в него представление ProductDetail, 
-    которое будет выдавать информацию об одном товаре.'''
-
-        # Метод get_context_data позволяет нам изменить набор данных,
-    # который будет передан в шаблон.
-    def get_context_data(self, **kwargs):
-        # С помощью super() мы обращаемся к родительским классам
-        # и вызываем у них метод get_context_data с теми же аргументами,
-        # что и были переданы нам.
-        # В ответе мы должны получить словарь.
-        context = super().get_context_data(**kwargs)
-        # К словарю добавим текущую дату в ключ 'time_now'.
-        context['time_now'] = datetime.utcnow()
-        # Добавим ещё одну пустую переменную,
-        # чтобы на её примере рассмотреть работу ещё одного фильтра.
-        context['next_sale'] = None
-        return context
-
-class ProductDetail(DetailView):
-    # Модель всё та же, но мы хотим получать информацию по отдельному товару
-    model = Product
-    # Используем другой шаблон — product.html
     template_name = 'product.html'
-    # Название объекта, в котором будет выбранный пользователем продукт
-    context_object_name = 'product'
+    context_object_name = 'products'
+    ordering = ['-price']
+    paginate_by = 1 # поставим постраничный вывод в один элемент
+
+    def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
+        context= super().get_context_data(**kwargs)
+        context['filter']= ProductFilter(self.request.GET, queryset=self.get_queryset())
+        return context

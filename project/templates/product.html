@@ -1,13 +1,76 @@
-<!--  наследуемся от шаблона default.html, который мы создавали для flatpages -->
 {% extends 'flatpages/default.html' %}
+{% load custom_filters %}
+<!-- Подключаем новый файл с нашим тегом -->
+{% load custom_tags %}
 
-<!-- Название у нас будет Product -->
 {% block title %}
-Product
-{% endblock title %}
+Продукт
 
-<!-- В контенте на странице мы выводим сам товар, идентификатор которого был передан в url -->
+{% endblock title %}
 {% block content %}
-<h1>{{ product }}</h1>
-<h1>Цена: {{ product.price }} руб</h1>
+<h1>Товар {{products.name}}</h1>
+<h3>{% current_time '%b %d %Y' %}</h3>
+<!--  или {{time_now|date:'M d Y'}}</h3> -->
+<!-- фильтр default_if_none -->
+<h3>{{next_sale|default_if_none:'Распродажи нет, не будет и не надейтесь.'}}</h3>
+<form method="GET">
+    {{filter.form}}
+    <input type="submit" , value="Выбрать">
+</form>
+<hr>
+{% if products %}
+<table>
+    <tr>
+        <td> Название: </td>
+        <td> Описание: </td>
+        <td> Категория: </td>
+        <td> Цена: </td>
+        <td> Количество: </td>
+    </tr>
+    {% for item in filter.qs %}
+    <!-- поменяем products на filter.qs, т. к. теперь мы забираем уже отобранную по каким-то параметрам информацию -->
+
+    <tr>
+        <td width="150">{{item.name}}</td>
+        <td>{{item.description|truncatewords:10}}</td>
+        <td width="300">{{item.category.name}}</td>
+        <td width="100">{{item.price|currency:"rub"}}</td>
+        <td width="100" align="center">{{item.quantity}}</td>
+    </tr>
+    {% endfor %}
+</table>
+<br><br>
+{% endif %}
+<!-- Проверяем, что поддерживается постраничный вывод -->
+{% if is_paginated %}
+
+<!-- Если доступна предыдущая страница, то даём ссылку на неё и самую первую страницу -->
+{% if page_obj.has_previous %}
+<a href="?page=1">First</a>
+<a href="?page={{ page_obj.previous_page_number }}">
+    <<<< /a>
+        {% endif %}
+
+        <!-- Показываем только текущую страницу и ближайшие к ней, чтобы список не тянулся и не захламлял страницу -->
+        {% for num in page_obj.paginator.page_range %}
+        {% if page_obj.number == num %}
+        <a>{{ num }}</a>
+        {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %} <a href="?page={{ num }}">{{ num }}
+</a>
+{% endif %}
+{% endfor %}
+
+<!-- Если есть следующая страница, то даём ссылку на неё и на самую последнюю страницу -->
+{% if page_obj.has_next %}
+<a href="?page={{ page_obj.next_page_number }}">>>></a>
+<a href="?page={{ page_obj.paginator.num_pages }}">Last</a>
+{% endif %}
+
+{% endif %}
+<br><br><br>
+
+<a href="/products">Все продукты</a>
+
 {% endblock content %}
+<!--Про тэги
+     http://htmlbook.ru/html/table -->
